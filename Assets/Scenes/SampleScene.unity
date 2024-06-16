@@ -244,8 +244,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c706f5a2b5bf944962e05db952cb16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 7
-  _height: 12
+  _rows: 12
+  _columns: 7
   _tilePrefab: {fileID: 2809254543822786261, guid: 7c3efe442ec8e3c4c91df2e1c9a48d41, type: 3}
   _cameraTrans: {fileID: 519420032}
 --- !u!4 &800893808

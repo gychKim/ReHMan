@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1767471638062705693}
   m_Layer: 0
   m_Name: Tile
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -35694047
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 469886a885c0418409325017c0e7f4b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pos: {x: 0, y: 0}
   _baseColor: {r: 0.39224198, g: 0.6698113, b: 0.33174616, a: 1}
   _offsetColor: {r: 0.32467538, g: 0.5566038, b: 0.2756764, a: 1}
   _renderer: {fileID: 6203640643815841216}
@@ -132,7 +133,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

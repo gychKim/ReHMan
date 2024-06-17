@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -6,18 +6,18 @@ using UnityEngine.Experimental.Rendering;
 public class GridManager : MonoBehaviour
 {
     [SerializeField]
-    private int _rows; // Çà > ÇàÀÇ ¼ö
+    private int _rows; // í–‰ > í–‰ì˜ ìˆ˜
     [SerializeField]
-    private int _columns; // ¿­ > ÇÑ ÇàÀÇ Å¸ÀÏ ¼ö
+    private int _columns; // ì—´ > í•œ í–‰ì˜ íƒ€ì¼ ìˆ˜
 
     [SerializeField] 
-    private Tile _tilePrefab; // Å¸ÀÏ ÇÁ¸®Æé
+    private Tile _tilePrefab; // íƒ€ì¼ í”„ë¦¬í©
 
     [SerializeField]
-    private Transform _cameraTrans; // Ä«¸Ş¶ó
+    private Transform _cameraTrans; // ì¹´ë©”ë¼
 
     [SerializeField]
-    private Dictionary<Vector2, Tile> _tileDict = new Dictionary<Vector2, Tile>(); // Å¸ÀÏ Dict > ¸ğµç Å¸ÀÏÀÇ À§Ä¡¿Í Á¤º¸¸¦ Áö´Ï°í ÀÖÀ½
+    private Dictionary<Vector2, Tile> _tileDict = new Dictionary<Vector2, Tile>(); // íƒ€ì¼ Dict > ëª¨ë“  íƒ€ì¼ì˜ ìœ„ì¹˜ì™€ ì •ë³´ë¥¼ ì§€ë‹ˆê³  ìˆìŒ
     private void Start()
     {
         GenerateGrid();
@@ -28,11 +28,12 @@ public class GridManager : MonoBehaviour
         { 
             for(int x = 0; x < _columns; x++) 
             {
-                Tile tile = Instantiate(_tilePrefab, new Vector3(x,y), Quaternion.identity);
+                Vector2 tilePos = new Vector2(x, y);
+                Tile tile = Instantiate(_tilePrefab, tilePos, Quaternion.identity);
                 tile.name = "Tile(" + x + "," + y + ")";
 
                 bool offset = (x % 2 == 0 && y % 2 != 0) || (x % 2 != 0 && y % 2 == 0);
-                tile.Init(offset);
+                tile.Init(tilePos, offset);
 
 
                 _tileDict.Add(new Vector2(x, y), tile);

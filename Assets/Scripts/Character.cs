@@ -11,6 +11,9 @@ public class Character : MonoBehaviour
     private bool _isDragging = false;
     private Vector3 _offset;
 
+    private Tile _prevTile; // 본인이 이전에 있었던 타일
+    private Tile _closestTile; // 본인이 놓여있는 타일
+
     void OnMouseDown() // 마우스 좌버튼 눌렀을 때
     {
         _isDragging = true;
@@ -20,7 +23,23 @@ public class Character : MonoBehaviour
     void OnMouseUp() // 마우스 좌버튼 땠을 때
     {
         _isDragging = false;
-        SnapToClosestTile();
+        if(_prevTile != null) // 이전에 머물렀던 타일이 있었다면, 
+        {
+            _prevTile.ClearTile(this); // 정보를 초기화 시켜준다.
+        }
+
+        if(_closestTile != null)
+        {
+            _closestTile.InitCharacter(this);
+
+            /// Z축을 이 객체의 Z축과 알맞도록 수정.
+            Vector3 snappedPos = _closestTile.transform.position;
+            snappedPos.z = transform.position.z;
+            transform.position = _closestTile.transform.position;
+
+            /// 아니면 아예 tile에 자식으로 넣는 로직을 만들어서, 함수를 호출하도록?
+        }
+        //SnapToClosestTile();
     }
 
     void Update()
@@ -28,6 +47,7 @@ public class Character : MonoBehaviour
         if (_isDragging) // isDrag즉, 좌버튼을 누르고 있는 상태라면
         {
             transform.position = GetMouseWorldPosition() + _offset; // 마우스의 월드 위치와, Offset을 더해 객체의 위치를 옮긴다.
+            HighlightTile();
         }
     }
 
@@ -63,11 +83,57 @@ public class Character : MonoBehaviour
 
         if (closestTile != null)
         {
+            Tile tile = closestTile.GetComponent<Tile>();
+
+            tile.InitCharacter(this);
+
             /// Z축을 이 객체의 Z축과 알맞도록 수정.
             Vector3 snappedPos = closestTile.transform.position;
             snappedPos.z = transform.position.z;
             transform.position = closestTile.transform.position;
 
+            /// 아니면 아예 tile에 자식으로 넣는 로직을 만들어서, 함수를 호출하도록?
+        }
+    }
+
+    /// <summary>
+    /// 내 아래에 타일이 있다면 그 타일 중 가장 가까운 타일을 빛나게 만든다<br> </br>
+    /// 타일에서 하려하니, 가장 가까운 타일을 찾기 위해서 Update를 돌려야 한다 > 손해 <br> </br>
+    /// 객체에서 처리한다 > Tile에서 처리하는게 자연스럽지만, 이게 더 가벼움 > 사실 이것도 Update써야 하긴 함. <br> </br>
+    /// 이건 기능만 있는 그 컴포넌트이므로 적어도 괜찮을 듯? <br> </br>
+    /// </summary>
+    private void HighlightTile()
+    {
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, new Vector2(1.0f, 1.0f), 0f); // 현재 객체의 Scale로 변경해도 괜찮을 듯
+        Tile newClosestTile = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Tile"))
+            {
+                float distance = Vector2.Distance(transform.position, collider.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    newClosestTile = collider.GetComponent<Tile>();
+                }
+            }
+        }
+
+        if (newClosestTile != _closestTile) // 더 가까운 Tile이 생겼다면,
+        {
+            if (_closestTile != null) // 기존타일의 하이라이트를 끈다.
+            {
+                _closestTile.SetHighlightTile(false);
+                _prevTile = _closestTile;
+            }
+
+            _closestTile = newClosestTile; // 새로운 타일을 등록
+            if (_closestTile != null) // 새로운 타일의 하이라이트를 킨다.
+            {
+                _closestTile.SetHighlightTile(true);
+            }
         }
     }
 }
